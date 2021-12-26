@@ -6,8 +6,9 @@
     {
         private static void Main()
         {
-            XorOneByteTask();
-            GeneticTask();
+            // XorOneByteTask();
+            XorByKeyTask();
+            // GeneticTask();
         }
 
         private static void GeneticTask()
@@ -19,6 +20,12 @@
         private static void XorOneByteTask()
         {
             var decrypted = XorOneByte.DecryptTask();
+            Console.WriteLine(decrypted);
+        }
+        
+        private static void XorByKeyTask()
+        {
+            var decrypted = XorByKey.Decrypt();
             Console.WriteLine(decrypted);
         }
     }

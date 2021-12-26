@@ -5,7 +5,7 @@
 
     public static class EnglishTextAnalyzer
     {
-        private static readonly double[] Count = new double[EnglishFrequencies.Count];
+        private static readonly double[] Count = new double[Constants.AllLetters.Length];
         private static int wrongCharactersAmount;
         private static string text;
 

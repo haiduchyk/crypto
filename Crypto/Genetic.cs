@@ -7,7 +7,7 @@
 
     public static class Genetic
     {
-        private static readonly char[] cyphrotext;
+        private static readonly char[] ciphertext;
         private static readonly Dictionary<string, double> threeGramIndexes = new();
         private static readonly Random random = new();
 
@@ -20,8 +20,8 @@
         static Genetic()
         {
             ReadThreeGrams();
-            cyphrotext = File.ReadAllText(@".\..\..\..\task3.txt").ToCharArray();
-            arrayForDecryption = new char[cyphrotext.Length];
+            ciphertext = File.ReadAllText(@".\..\..\..\task3.txt").ToCharArray();
+            arrayForDecryption = new char[ciphertext.Length];
         }
 
         private static void ReadThreeGrams()
@@ -48,7 +48,7 @@
 
         private static double EstimateBasedOnThreeGrams(char[] populationItem)
         {
-            var decrypted = DecryptSubstitution(cyphrotext, populationItem);
+            var decrypted = DecryptSubstitution(ciphertext, populationItem);
             return GetThreeGramsValue(decrypted);
         }
 
@@ -80,13 +80,12 @@
                 bestEstimation = EstimateBasedOnThreeGrams(best);
                 generation++;
 
-                Console.WriteLine(
-                    $"\ngeneration: {generation}; best: {new string(best)}; estimation: {bestEstimation * 1000}");
-                Console.WriteLine(DecryptSubstitution(cyphrotext, best));
+                Console.WriteLine($"\ngeneration: {generation}; best: {new string(best)}; estimation: {bestEstimation * 1000}");
+                Console.WriteLine(DecryptSubstitution(ciphertext, best));
             } while (bestEstimation < ExpectedIndex);
 
 
-            var decrypted = DecryptSubstitution(cyphrotext, GetBest(population, 1)[0]);
+            var decrypted = DecryptSubstitution(ciphertext, GetBest(population, 1)[0]);
             return decrypted;
         }
 
