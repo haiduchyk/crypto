@@ -34,6 +34,17 @@
                     result.Append(selections[j][i]);
                 }
             }
+
+            var lastLetterIndex = selections[0].Length - 1;
+
+            for (var j = 0; j < keyLength; j++)
+            {
+                if (selections[j].Length == lastLetterIndex + 1)
+                {
+                    result.Append(selections[j][lastLetterIndex]);
+                }
+            }
+
             return result.ToString();
         }
 
