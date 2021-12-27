@@ -50,19 +50,10 @@
 
         private static IEnumerable<List<byte>> GetSectionsByKeyLength(int keyLength, IReadOnlyList<byte> text)
         {
-            var sections = new List<List<byte>>();
-            for (var i = 0; i < keyLength; i++)
-            {
-                var section = new List<byte>();
-                for (var j = i; j < text.Count; j += keyLength)
-                {
-                    section.Add(text[j]);
-                }
-
-                sections.Add(section);
-            }
-
-            return sections;
+            return text
+                .Select((t, i) => new {Index = i, Value = t})
+                .GroupBy(x => x.Index % keyLength)
+                .Select(x => x.Select(v => v.Value).ToList());
         }
     }
 }
