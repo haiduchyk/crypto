@@ -1,4 +1,4 @@
-﻿namespace Crypto
+﻿namespace Lab1
 {
     using System.Linq;
     using System;

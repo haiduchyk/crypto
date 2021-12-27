@@ -1,4 +1,4 @@
-﻿namespace Crypto
+﻿namespace Lab1
 {
     using System;
     using System.Collections.Generic;

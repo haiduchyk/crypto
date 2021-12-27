@@ -1,4 +1,4 @@
-﻿namespace Crypto
+﻿namespace Lab1
 {
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
