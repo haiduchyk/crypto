@@ -5,19 +5,19 @@
     using System.Collections.Generic;
     using System.IO;
 
-    public static class Genetic
+    public static class Substitution
     {
         private static readonly char[] ciphertext;
         private static readonly Dictionary<string, double> threeGramIndexes = new();
         private static readonly Random random = new();
 
         private const double ExpectedIndex = 0.00097;
-        private const int AmountOfBestFromPopulation = 100;
-        private const int FirstPopulationAmount = 1000;
-        private const int ChanceForMutationFromZeroToHundred = 50;
+        private const int AmountOfBestFromPopulation = 300;
+        private const int ChanceForMutationFromZeroToHundred = 60;
+        private const int MutationsAmount = 2;
         private static readonly char[] arrayForDecryption;
 
-        static Genetic()
+        static Substitution()
         {
             ReadThreeGrams();
             ciphertext = File.ReadAllText(@".\..\..\..\task3.txt").ToCharArray();
@@ -67,7 +67,7 @@
         public static string Decrypt()
         {
             var generation = 0;
-            var population = GetFirstPopulation(FirstPopulationAmount);
+            var population = GetFirstPopulation(AmountOfBestFromPopulation);
             double bestEstimation;
 
             do
@@ -80,7 +80,8 @@
                 bestEstimation = EstimateBasedOnThreeGrams(best);
                 generation++;
 
-                Console.WriteLine($"\ngeneration: {generation}; best: {new string(best)}; estimation: {bestEstimation * 1000}");
+                Console.WriteLine(
+                    $"\ngeneration: {generation}; best: {new string(best)}; estimation: {bestEstimation * 1000}");
                 Console.WriteLine(DecryptSubstitution(ciphertext, best));
             } while (bestEstimation < ExpectedIndex);
 
@@ -129,7 +130,7 @@
 
         private static List<char[]> GetBest(List<char[]> population, int aliveCount)
         {
-            return population.OrderByDescending(EstimateBasedOnThreeGrams).Take(aliveCount).ToList();
+            return population.Distinct().OrderByDescending(EstimateBasedOnThreeGrams).Take(aliveCount).ToList();
         }
 
         private static void Crossing(List<char[]> bestFromPopulation)
@@ -147,24 +148,28 @@
 
         private static void MutatePopulation(List<char[]> population)
         {
-            foreach (var c in population)
-            {
-                var rnd = random.Next(100);
-                if (rnd <= ChanceForMutationFromZeroToHundred)
-                {
-                    Mutate(c);
-                }
-            }
+            var newChildren =
+                (from c in population
+                    let rnd = random.Next(100)
+                    where rnd <= ChanceForMutationFromZeroToHundred
+                    select Mutate(c)).ToList();
+            population.AddRange(newChildren);
         }
 
-        private static void Mutate(char[] item)
+        public static char[] Mutate(char[] item)
         {
-            var index1 = random.Next(item.Length);
-            var index2 = random.Next(item.Length);
-            (item[index1], item[index2]) = (item[index2], item[index1]);
+            var newItem = (char[]) item.Clone();
+            for (var i = 0; i < random.Next(MutationsAmount) + 1; i++)
+            {
+                var index1 = random.Next(item.Length);
+                var index2 = random.Next(item.Length);
+                (newItem[index1], newItem[index2]) = (newItem[index2], newItem[index1]);
+            }
+
+            return newItem;
         }
 
-        private static char[] Cross(char[] firstParent, char[] secondParent)
+        public static char[] Cross(char[] firstParent, char[] secondParent)
         {
             var child = new char[firstParent.Length];
             var letters = Constants.AllLetters.ToList();
