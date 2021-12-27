@@ -12,10 +12,10 @@
         private static readonly Random random = new();
 
         private const double ExpectedIndex = 0.00107;
-        private const int AmountOfBestFromPopulation = 1500;
+        private const int AmountOfBestFromPopulation = 2000;
         private static readonly char[] arrayForDecryption;
         private const int KeyLength = 4;
-        private const int MutationIterationsAmount = 1;
+        private const int MutationIterationsAmount = 3;
 
         static PolySubstitution()
         {
