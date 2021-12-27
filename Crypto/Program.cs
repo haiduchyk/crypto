@@ -7,14 +7,10 @@
         private static void Main()
         {
             // XorOneByteTask();
-            XorByKeyTask();
-            // GeneticTask();
-        }
-
-        private static void GeneticTask()
-        {
-            var decrypted = Genetic.Decrypt();
-            Console.WriteLine(decrypted);
+            // XorByKeyTask();
+            // SubstitutionTask();
+            PolySubstitutionTask();
+   
         }
 
         private static void XorOneByteTask()
@@ -26,6 +22,18 @@
         private static void XorByKeyTask()
         {
             var decrypted = XorByKey.Decrypt();
+            Console.WriteLine(decrypted);
+        }
+        
+        private static void SubstitutionTask()
+        {
+            var decrypted = Substitution.Decrypt();
+            Console.WriteLine(decrypted);
+        }
+        
+        private static void PolySubstitutionTask()
+        {
+            var decrypted = PolySubstitution.Decrypt();
             Console.WriteLine(decrypted);
         }
     }
