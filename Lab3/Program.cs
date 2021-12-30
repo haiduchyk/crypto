@@ -9,7 +9,8 @@
 
         private static void Main()
         {
-            LcgTask();
+            // LcgTask();
+            MtTask();
         }
 
         private static void LcgTask()
@@ -24,12 +25,41 @@
             var (a, c) = LcgCracker.GetCoefs(numbers);
             var lcg = new Lcg(a, c, numbers[2]);
 
-            while (CasinoRequestProvider.account.Money < MoneyToWin)
+            while (CasinoRequestProvider.Money < MoneyToWin)
             {
                 var next = lcg.Next();
                 var result = CasinoRequestProvider.Play(BetAmount, next, Mode.Lcg);
                 Console.WriteLine(result);
             }
+        }
+
+        private static void MtTask()
+        {
+            var mt19937 = GetTunedMt();
+            while (CasinoRequestProvider.Money < MoneyToWin)
+            {
+                var currentNumber = (long) mt19937.genrand_int32();
+                var result = CasinoRequestProvider.Play(BetAmount, currentNumber, Mode.Mt);
+                Console.WriteLine(result);
+            }
+        }
+
+        private static Mt19937 GetTunedMt()
+        {
+            var seed = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var mt19937 = new Mt19937();
+
+            var currentNumber = (long) mt19937.genrand_int32();
+            var targetNumber = CasinoRequestProvider.Play(BetAmount, 1, Mode.Mt).RealNumber;
+
+            while (currentNumber != targetNumber)
+            {
+                seed++;
+                mt19937.init_genrand((ulong) seed);
+                currentNumber = (long) mt19937.genrand_int32();
+            }
+
+            return mt19937;
         }
     }
 }

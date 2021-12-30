@@ -2,14 +2,14 @@
 {
     using System;
     using System.Net.Http;
-    using System.Threading.Tasks;
     using Newtonsoft.Json;
 
     public static class CasinoRequestProvider
     {
         private static readonly HttpClient client = new();
 
-        public static Account account;
+        private static Account account;
+        public static int Money => account.Money;
 
         static CasinoRequestProvider()
         {
@@ -41,6 +41,7 @@
             {
                 return JsonConvert.DeserializeObject<T>(message);
             }
+
             throw new Exception(message);
         }
     }
