@@ -1,65 +1,43 @@
 ﻿namespace Lab3
 {
-    using System;
-    using System.Collections;
-    using System.Linq;
-
-    public class MtCracker
+    public static class MtCracker
     {
-        public static ulong InverseOfXorRightShift(ulong value, int shifts)
+        public static ulong[] CalulateCurrentState(ulong[] sequence)
         {
-            while (shifts < 32)
+            var state = new ulong[Mt19937.N];
+            for (var i = 0; i < state.Length; i++)
             {
-                value ^= value >> shifts;
-                shifts *= 2;
+                state[i] = Distempering(sequence[i]);
             }
-            return value;
+            return state;
         }
         
-        // 
-        // abcdefgh ^
-        // 0abcdefg =
-        // ijklmnop
-        
-        
-        public static long UndoXorLeftShiftMask(long v, int shift, long mask2)
+        // https://www.maths.tcd.ie/~fionn/misc/mt/
+        private static ulong Distempering(ulong value)
         {
-            var y = new BitArray(BitConverter.GetBytes(v)).Cast<bool>().Take(32).ToArray();;
-                
-            var mask = new BitArray(BitConverter.GetBytes(mask2)).Cast<bool>().Take(32).ToArray();;
-            
+            var y = value;
 
-            y = y.Reverse().ToArray();
-            mask = mask.Reverse().ToArray();
-                
-                
-            var x = new bool[32];
+            // # Inverse of y = y ^ (y >> 18)
+            y ^= (y >> 18);
 
-            for (var n = 0; n < 32; n++)
-            {
-                if (n < shift) {
-                    x[n] = y[n];
-                } else {
-                    x[n] = y[n] ^ mask[n] & x[n - shift];
-                }
-            }
-            
-            return BoolArrayToInt(x.Reverse().ToArray());
-        }
-        
-        static long BoolArrayToInt(bool[] bits){
-            if(bits.Length > 32) throw new ArgumentException("Can only fit 32 bits in a uint");
- 
-            long r = 0;
-            for (int i = 0; i < bits.Length; i++)
-            {
-                if (bits[i])
-                {
-                    r |= (uint) (1 << ( bits.Length - i));
-                }
-            }
+            // # Inverse of y = y ^ ((y << 15) & 0xefc60000)
+            y ^= ((y & 0x1df8c) << 15);
 
-            return r;
+            // # Inverse of y = y ^ ((y << 7) & 0x9d2c5680)
+            var t = y;
+            t = ((t & 0x0000002d) << 7) ^ y;
+            t = ((t & 0x000018ad) << 7) ^ y;
+            t = ((t & 0x001a58ad) << 7) ^ y;
+            y = ((t & 0x013a58ad) << 7) ^ y;
+
+            // Inverse of y = y ^ (y >> 11)
+            var top = y & 0xffe00000;
+            var mid = y & 0x001ffc00;
+            var low = y & 0x000003ff;
+
+            y = top | ((top >> 11) ^ mid) | ((((top >> 11) ^ mid) >> 11) ^ low);
+
+            return y;
         }
     }
 }
