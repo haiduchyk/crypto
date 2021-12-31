@@ -28,8 +28,8 @@
         {
             var url = $"play{mode}?id={account.Id}&bet={bet}&number={number}";
             var betResult = Get<BetResult>(url);
-            account.Money = betResult.Account.Money;
-            betResult.BetNumber = bet;
+            account = betResult.Account;
+            betResult.BetNumber = number;
             return betResult;
         }
 

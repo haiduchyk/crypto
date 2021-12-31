@@ -10,7 +10,8 @@
         private static void Main()
         {
             // LcgTask();
-            MtTask();
+            // MtTask();
+            // MtBetter();
         }
 
         private static void LcgTask()
@@ -61,5 +62,11 @@
 
             return mt19937;
         }
+        
+        private static void MtBetter()
+        {
+            
+        }
+
     }
 }
