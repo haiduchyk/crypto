@@ -11,7 +11,7 @@
         {
             // LcgTask();
             // MtTask();
-            // MtBetter();
+            MtBetter();
         }
 
         private static void LcgTask()
@@ -62,11 +62,26 @@
 
             return mt19937;
         }
-        
+
         private static void MtBetter()
         {
-            
-        }
+            var numbers = new ulong[Mt19937.N];
+            for (var i = 0; i < numbers.Length; i++)
+            {
+                var result = CasinoRequestProvider.Play(1, 1, Mode.BetterMt);
+                numbers[i] = (ulong) result.RealNumber;
+            }
 
+            var state = MtCracker.CalulateCurrentState(numbers);
+            var mt = new Mt19937();
+            mt.init_genrand(state);
+
+            while (CasinoRequestProvider.Money < MoneyToWin)
+            {
+                var next = (long) mt.genrand_int32();
+                var result = CasinoRequestProvider.Play(BetAmount, next, Mode.BetterMt);
+                Console.WriteLine(result);
+            }
+        }
     }
 }

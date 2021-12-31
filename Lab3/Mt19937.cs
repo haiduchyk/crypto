@@ -3,7 +3,7 @@
     public class Mt19937
     {
         // Period parameters
-        private const ulong N = 624;
+        public const ulong N = 624;
         private const ulong M = 397;
         private const ulong MATRIX_A = 0x9908B0DFUL; // constant vector a 
         private const ulong UPPER_MASK = 0x80000000UL; // most significant w-r bits
@@ -17,6 +17,11 @@
             var init = new ulong[] {0x123, 0x234, 0x345, 0x456};
             ulong length = 4;
             init_by_array(init, length);
+        }
+        
+        public void init_genrand(ulong[] states)
+        {
+            mt = states;
         }
 
         // initializes mt[N] with a seed
