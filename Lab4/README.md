@@ -3,7 +3,7 @@
 Created 100,000 passwords, and hashed them using MD5, SHA1 and BCrypt. 
 You can find results in generated-sha1.csv, generated-md5.csv and generated-bcrypt.csv
 
-## Top 100 common was generated
+## How top 100 common was generated
 Take randomly from 100k_passwords.txt with 10% chance.
 Take randomly from top100_common_passwords.txt
 Top 100 common passwords got from https://nordpass.com/most-common-passwords-list/
