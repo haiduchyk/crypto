@@ -11,7 +11,7 @@
         {
             // LcgTask();
             // MtTask();
-            MtBetter();
+            MtBetterTask();
         }
 
         private static void LcgTask()
@@ -63,7 +63,7 @@
             return mt19937;
         }
 
-        private static void MtBetter()
+        private static void MtBetterTask()
         {
             var numbers = new ulong[Mt19937.N];
             for (var i = 0; i < numbers.Length; i++)
