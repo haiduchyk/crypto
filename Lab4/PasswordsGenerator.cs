@@ -14,6 +14,17 @@
         private const int MaxModificationsAmount = 2;
 
         private static string[] allPasswords;
+        private static string[] topPasswords;
+
+
+        private const float RandomPercent = 0.03f;
+        private const float TopHundredPercent = 0.1f;
+
+        private const string PossibleCharactersForRandomPassword =
+            "abcdefghijklmnopqrstuvwxyz123456789!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~";
+
+        private const int RandomMaxSize = 16;
+        private const int RandomMinSize = 8;
 
         static PasswordsGenerator()
         {
@@ -38,12 +49,49 @@
         private static void ReadPasswords()
         {
             allPasswords = File.ReadAllLines("./../../../100k_passwords.txt");
+            topPasswords = File.ReadAllLines("./../../../top100_common_passwords.txt");
         }
 
-        // public static string GeneratePassword()
-        // {
-        //     return null;
-        // }
+        public static string[] GeneratePasswords(int amount)
+        {
+            var passwords = new string[amount];
+            for (var i = 0; i < amount; i++)
+            {
+                var next = Random.NextDouble();
+                if (next < RandomPercent)
+                {
+                    passwords[i] = GenerateRandomPassword();
+                }
+                else if (next < RandomPercent + TopHundredPercent)
+                {
+                    passwords[i] = GetTop100Password();
+                }
+                else
+                {
+                    passwords[i] = GetHumanLikePassword();
+                }
+            }
+
+            return passwords;
+        }
+
+        private static string GenerateRandomPassword()
+        {
+            var builder = new StringBuilder();
+            var lenght = Random.Next(RandomMinSize, RandomMaxSize + 1);
+            for (var i = 0; i < lenght; i++)
+            {
+                var index = Random.Next(PossibleCharactersForRandomPassword.Length);
+                builder.Append(PossibleCharactersForRandomPassword[index]);
+            }
+
+            return builder.ToString();
+        }
+
+        private static string GetTop100Password()
+        {
+            return topPasswords[Random.Next(topPasswords.Length)];
+        }
 
         public static string GetHumanLikePassword()
         {

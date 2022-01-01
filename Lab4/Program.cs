@@ -6,7 +6,7 @@
     {
         private static void Main()
         {
-            Console.WriteLine(PasswordsGenerator.GetHumanLikePassword());
+            var passwords = PasswordsGenerator.GeneratePasswords(1000);
         }
     }
 }
