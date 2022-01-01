@@ -19,6 +19,7 @@
 
         private const float RandomPercent = 0.03f;
         private const float TopHundredPercent = 0.1f;
+        private const float HumanLikePercent = 0.1f;
 
         private const string PossibleCharactersForRandomPassword =
             "abcdefghijklmnopqrstuvwxyz123456789!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~";
@@ -66,9 +67,13 @@
                 {
                     passwords[i] = GetTop100Password();
                 }
-                else
+                else if (next < RandomPercent + TopHundredPercent + HumanLikePercent)
                 {
                     passwords[i] = GetHumanLikePassword();
+                }
+                else
+                {
+                    passwords[i] = GetWeakPassword();
                 }
             }
 
@@ -89,6 +94,11 @@
         }
 
         private static string GetTop100Password()
+        {
+            return topPasswords[Random.Next(topPasswords.Length)];
+        }
+        
+        private static string GetWeakPassword()
         {
             return topPasswords[Random.Next(topPasswords.Length)];
         }
